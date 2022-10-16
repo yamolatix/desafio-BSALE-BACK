@@ -1,6 +1,9 @@
 // Express para las rutas
 const express = require('express');
 
+//Requiero el .env
+require("dotenv").config();
+
 // Middelwares
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -34,7 +37,7 @@ app.use((err, req, res, next) => {
 });
 
 // Conecto servidor
-const PORT = 3001;
+const PORT = process.env.PORT;
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
