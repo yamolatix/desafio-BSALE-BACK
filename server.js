@@ -18,14 +18,14 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(volleyball)
-app.use(
-    cors({
-        header: 'Access-Control-Allow-Origin: *',
-        /* origin:"https://desafio-bsale-front-one.vercel.app/", */
-        methods: 'PUT, GET, POST, DELETE, OPTIONS',
-        credentials: true,
-    })
-);
+app.use(cors())
+app.use((req, res, next) => {
+
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    next();
+});
 
 // Routes
 app.use('/api', routes);
