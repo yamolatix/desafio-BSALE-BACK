@@ -2,7 +2,7 @@
 const express = require('express');
 
 //Requiero el .env
-require('dotenv').config();
+require("dotenv").config();
 
 // Middelwares
 const cookieParser = require('cookie-parser');
@@ -20,7 +20,8 @@ app.use(cookieParser());
 app.use(volleyball)
 app.use(
     cors({
-        origin: 'https://desafio-bsale-front-one.vercel.app/',
+        header: 'Access-Control-Allow-Origin: *',
+        /* origin:"https://desafio-bsale-front-one.vercel.app/", */
         methods: 'PUT, GET, POST, DELETE, OPTIONS',
         credentials: true,
     })
