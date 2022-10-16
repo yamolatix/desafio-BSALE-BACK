@@ -18,15 +18,20 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(volleyball)
-app.use(cors())
-app.use((req, res, next) => {
+app.use(cors({
+    origin: "*",
+    credentials: true,
+    methods: ['GET', 'POST', 'DELETE', 'OPTIONS'],
+    header: 'Origin, X-Requested-With, Content-Type, Accept'
+}))
+/* app.use((req, res, next) => {
 
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, HEAD, PUT, PATCH, POST, DELETE');
     next();
-});
+}); */
 
 // Routes
 app.use('/api', routes);
