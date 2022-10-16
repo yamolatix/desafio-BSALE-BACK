@@ -2,7 +2,7 @@
 const { createPool } = require('mysql');
 
 //Requiero el .env
-require("dotenv").config();
+require('dotenv').config();
 
 // Creo el objeto de conexion y lo guardo en una constante
 const pool = createPool({
@@ -15,7 +15,7 @@ const pool = createPool({
 function handleConnection() {
     pool.getConnection(function (err, connection) {
         if (err) {
-            console.error("mysql getConnection err", err);
+            console.error('mysql getConnection err', err);
             return;
         }
         connection.ping();
