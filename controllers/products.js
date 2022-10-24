@@ -1,59 +1,31 @@
-const pool = require('../config/db');
+const { Router } = require('express'); // Requiero Express.js
+const products = Router();  // Conecto Express.js para su uso y le asigno el nombre
+const models = require('../models/product'); // Llamo a los models con los pedidos
 
-//Ruta que muestra todos los productos
-exports.allProducts = async (req, res, next) => {
+// GET "/api/products" Controller que trae todos los productos
+products.get('/', async (req, res) => {
     try {
-        const baseQuery = 'SELECT * FROM product'
+        const products = await models.getAllProducts()
+        res.send(products);
 
-        await pool.query(baseQuery, (err, result) => {
-
-            if (err) return next(err);
-
-            const products = result;
-
-            return res.send(products);
-        })
     } catch (error) {
-        return res.status(500).json({ message: 'Something goes wrong' })
+        return res.status(500).send({ message: 'Something goes wrong in controller: allProducts' })
     }
-};
+});
 
-//Ruta que muestra un producto en particular
-exports.individualProduct = async (req, res, next) => {
+// GET "/api/products/search/:name" Controller que trae los productos que decidan buscarse
+products.get('/search/:name', async (req, res) => {
     try {
-        const baseQuery = 'SELECT * FROM product WHERE id = ?'
+        const products = await models.getSearchProducts(req.params.name)
 
-        await pool.query(baseQuery, [req.params.id], (err, result) => {
+        // En caso de que el arreglo que devuelva esté vacío es porque no se encontró coincidencias en la búsqueda
+        if (products.length <= 0) return res.status(204).json({ message: 'Product not found' })
 
-            if (err) return next(err);
+        res.send(products);
 
-            const product = result;
-
-            if (result.length <= 0) return res.status(404).json({ message: 'Product not found' })
-
-            return res.send(product);
-        })
     } catch (error) {
-        return res.status(500).json({ message: 'Something goes wrong' })
+        return res.status(500).send({ message: 'Something goes wrong in controller: searchProducts' })
     }
-};
+});
 
-// Busca productos por nombre
-exports.searchProducts = async (req, res, next) => {
-    try {
-        const baseQuery = `SELECT * FROM product WHERE name LIKE '%${req.params.name}%'`
-
-        await pool.query(baseQuery, (err, result) => {
-
-            if (err) return next(err);
-
-            const search = result;
-
-            if (search.length <= 0) return res.status(404).json({ message: 'Product not found' })
-
-            return res.send(search);
-        })
-    } catch (error) {
-        return res.status(500).json({ message: 'Something goes wrong' })
-    }
-}
+module.exports = products; // Exporto los controllers

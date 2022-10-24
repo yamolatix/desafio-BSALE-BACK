@@ -1,36 +1,25 @@
-const pool = require('../config/db');
+const { Router } = require('express'); // Requiero Express.js
+const category = Router(); // Conecto Express.js para su uso y le asigno el nombre
+const models = require('../models/category'); // Llamo a los models con los pedidos
 
-//Ruta que muestra una categoría
-exports.allCategories = async (req, res, next) => {
+// GET "/api/category" Controller que trae todas las categorias
+category.get('/', async (req, res) => {
     try {
-        const baseQuery = 'SELECT * FROM category'
-        await pool.query(baseQuery, (err, result) => {
-
-            if (err) return next(err);
-
-            const categories = result;
-            return res.send(categories);
-        })
+        const categories = await models.getAllCategories()
+        res.send(categories)
     } catch (error) {
-        return res.status(500).json({ message: 'Something goes wrong' })
+        return res.status(500).json({ message: 'Something goes wrong in controller: getAllCategories' })
     }
-};
+});
 
-//Ruta que muestra los productos correspondientes a una categoría
-exports.productsInCategories = async (req, res, next) => {
+// GET "/api/category/:categoryId" Controller que trae los productos que pertenecen a X categoria
+category.get('/:categoryId', async (req, res) => {
     try {
-        const baseQuery = 'SELECT * FROM product INNER JOIN category ON category.id=product.category WHERE product.category=?'
-        await pool.query(baseQuery, [req.params.categoryId], (err, result) => {
-
-            if (err) return next(err);
-
-            const categories = result;
-            return res.send(categories);
-        })
+        const productsInCategories = await models.getProductsInCategories(req.params.categoryId)
+        res.send(productsInCategories)
     } catch (error) {
-        return res.status(500).json({ message: 'Something goes wrong' })
+        return res.status(500).json({ message: 'Something goes wrong in controller: productsInCategories' })
     }
-};
+});
 
-
-
+module.exports = category; // Exporto los controllers

@@ -1,27 +1,7 @@
-//Importo la función utilizada para producción de mysql
-const { createPool } = require('mysql');
+const { createPool } = require('mysql'); // Importo la función utilizada para producción de mysql
+const config = require('./config') // Llamo al loader
 
-//Requiero el .env
-require('dotenv').config();
+// Conecto la base de datos
+const pool = createPool(config.db);
 
-// Creo el objeto de conexion y lo guardo en una constante
-const pool = createPool({
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE,
-});
-
-function handleConnection() {
-    pool.getConnection(function (err, connection) {
-        if (err) {
-            console.error('mysql getConnection err', err);
-            return;
-        }
-        connection.ping();
-        connection.release();
-    });
-}
-setInterval(handleConnection, 5000);
-
-module.exports = pool;
+module.exports = pool; // Exporto la conexión de la db

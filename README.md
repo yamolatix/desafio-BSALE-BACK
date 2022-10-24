@@ -19,7 +19,7 @@ Esta API permite llamadas del tipo REST y utiliza JSON para el envío y recepci�
 https://yamilaortiztoscano.com.ar/bsale/
 
 #### Hosting Back
-https://desafio-bsale-back.onrender.com
+https://desafio-bsale-back.onrender.com/
 
 #### Configuración
 
